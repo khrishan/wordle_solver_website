@@ -7,6 +7,7 @@ import {
   Snackbar,
   Typography
 } from '@mui/material'
+
 import Footer from './Footer'
 
 import { submitGuess } from '../resources/api';
@@ -162,61 +163,66 @@ const App = () => {
     }, [handleKeyPress]);
 
     return (
-        <Grid container direction='column' justify='center' sx={{ backgroundColor : '#300A24', height : '100vh' }}>
-            <Grid item style={{ color : '#FFFFFF', margin: '0.5em' }}> { /* Header */ }
-                <Typography variant='h4' align='center'>Wordle Solver</Typography>
-            </Grid>
-            <Grid item container align='center' sx={{ backgroundColor : '#131313' }}> { /* Guesses */ }
-                {guesses.map((guess, guessIndex) => {
-                    return (
-                        <Grid key={`guess_${guessIndex}`} item container justifyContent='center' direction='row'>
-                            {guess['word'] !== undefined ?
+        <Grid container direction='column' justify='center' sx={{ backgroundColor : '#300A24', height : '100%' }}>
+            <Grid item container justifyContent='center' alignItems='center' justify='center' style={{ top: 0, position : 'sticky', backgroundColor : '#131313' }}>
+                { /* Title */ }
+                <Grid item style={{ align : 'center', color : '#FFFFFF', margin: '0.5em' }}> { /* Header */ }
+                    <Typography variant='h4' align='center'>Wordle Solver</Typography>
+                </Grid>
+                { /* Guesses */ }
+                <Grid item container align='center' sx={{ backgroundColor : '#131313' }}>
+                    {guesses.map((guess, guessIndex) => {
+                        return (
+                            <Grid key={`guess_${guessIndex}`} item container justifyContent='center' direction='row'>
+                                {guess['word'] !== undefined ?
+
+                                    [0,1,2,3,4].map(index => {
+                                        const test = typeof guess[index] === 'undefined';
+                                        return (
+                                            <Grid key={`${guess.word}_${index}`} item style={{ paddingTop : '1em', paddingBottom : '1em', paddingLeft : '0.5em' }}>
+                                                <Avatar sx={{ bgcolor: handleBackgroundColour(guessIndex, index), width : '50px', height : '50px' }} variant="square" alt='___' src="/broken-image.jpg" onClick={() => handleRotateTile(guessIndex, index, guess['word'][index])}>
+                                                    {test ? guess['word'][index] : '_'}
+                                                </Avatar>
+                                            </Grid>
+                                        )
+                                    })
+                                
+                                :
 
                                 [0,1,2,3,4].map(index => {
-                                    const test = typeof guess[index] === 'undefined';
                                     return (
-                                        <Grid key={`${guess.word}_${index}`} item style={{ paddingTop : '1em', paddingBottom : '1em', paddingLeft : '0.5em' }}>
-                                            <Avatar sx={{ bgcolor: handleBackgroundColour(guessIndex, index), width : '50px', height : '50px' }} variant="square" alt='___' src="/broken-image.jpg" onClick={() => handleRotateTile(guessIndex, index, guess['word'][index])}>
-                                                {test ? guess['word'][index] : '_'}
+                                        <Grid key={`blank_${index}`}  item style={{ paddingTop : '1em', paddingBottom : '1em', paddingLeft : '0.5em' }}>
+                                            <Avatar sx={{ bgcolor: BLANK, width : '50px', height : '50px' }} variant="square" alt='___' src="/broken-image.jpg">
+                                                _
                                             </Avatar>
                                         </Grid>
                                     )
                                 })
-                            
-                            :
 
-                            [0,1,2,3,4].map(index => {
-                                return (
-                                    <Grid key={`blank_${index}`}  item style={{ paddingTop : '1em', paddingBottom : '1em', paddingLeft : '0.5em' }}>
-                                        <Avatar sx={{ bgcolor: BLANK, width : '50px', height : '50px' }} variant="square" alt='___' src="/broken-image.jpg">
-                                            _
-                                        </Avatar>
-                                    </Grid>
-                                )
-                            })
-
-                            }
-                        </Grid>
-                    )
-                })}
-                
-                <Grid item container direction='row' justifyContent='center' alignItems='center' sx={{ padding : '1em' }}>
-                <Grid item sx={{ padding : '0.5em' }}>
-                    <Button variant='contained' onClick={handleClearGuesses}>Clear</Button>
-                </Grid>
-                <Grid item sx={{ padding : '0.5em' }}>
-                    <Button variant='contained' onClick={handleAddRow}>+</Button>
-                </Grid>
-                <Grid item sx={{ padding : '0.5em' }}>
-                    <Button variant='contained' onClick={handleSubmit}>Submit</Button>
-                </Grid>
+                                }
+                            </Grid>
+                        )
+                    })}
+                    
+                    <Grid item container direction='row' justifyContent='center' alignItems='center' sx={{ padding : '1em' }}>
+                    <Grid item sx={{ padding : '0.5em' }}>
+                        <Button variant='contained' onClick={handleClearGuesses}>Clear</Button>
+                    </Grid>
+                    <Grid item sx={{ padding : '0.5em' }}>
+                        <Button variant='contained' onClick={handleAddRow}>+</Button>
+                    </Grid>
+                    <Grid item sx={{ padding : '0.5em' }}>
+                        <Button variant='contained' onClick={handleSubmit}>Submit</Button>
+                    </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
-            <Grid item container align='center' justifyContent='space-around' direction='column' sx={{ backgroundColor : '#300A24', padding: '1em'}}> { /* Valid Words */ }
+            { /* Valid Words */ }
+            <Grid item container align='center' justifyContent='space-around' direction='column' sx={{ backgroundColor : '#300A24', padding: '1em', overflow : 'hidden', width : '100%'}}> { /* Valid Words */ }
                 <Grid item>
                     <Typography variant='h5' sx={{ color : '#FFFFFF'}}>Valid Words</Typography>
                 </Grid>
-                <Grid item container align='center' justifyContent='space-between' style={{ padding : '1em', paddingBottom : '1em'}} md={4}>
+                <Grid item container align='center' justifyContent='space-between' style={{ padding : '1em', paddingBottom : '1em', width : '100%'}} md={4}>
                 {answers.map( ans => {
                     return (
                         <Grid key={ans} item container align='center' justifyContent='center' sx={{ border : 'solid 1px #ffffff', width : '100px', borderRadius: '25px', padding : '0.5em', margin : '0.5em'}}>
@@ -228,6 +234,9 @@ const App = () => {
                 })}            
                 </Grid>
             </Grid>
+            { /* Footer */ }
+            <Footer />
+            { /* Snackbar */ }
             <Grid item>
                 <Snackbar open={snackbarSettings.open} autoHideDuration={6000} onClose={() => setSnackbarSettings({ ...snackbarSettings, open : false})} anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}>
                     <Alert onClose={() => setSnackbarSettings({ ...snackbarSettings, open : false})} severity={snackbarSettings.severity} sx={{ width: '100%' }}>
@@ -235,10 +244,6 @@ const App = () => {
                     </Alert>
                 </Snackbar>
             </Grid>
-            <Grid item>
-                <Footer />
-            </Grid>
-        
         </Grid>
     );
 }
