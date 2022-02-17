@@ -7,8 +7,7 @@ import instagram from '../img/instagram.svg'
 import github from '../img/github.svg' 
 import linkedin from '../img/linkedin.svg' 
 
-const Footer = ({style}) => { 
-  console.log(style)
+const Footer = () => { 
   return (
     <div>
         <footer style={{padding: '1em', position : 'fixed', width : '100%', bottom : '0', textAlign: 'center', backgroundColor: '#151515', color: '#f4f5f7'}}>

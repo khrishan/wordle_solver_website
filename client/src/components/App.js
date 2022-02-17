@@ -80,6 +80,9 @@ const App = () => {
     }
     
     const handleMobileKeyboard = (e, f) => {
+        if(e === '{backspace}'){
+            e = 'Backspace'
+        }
         const key = {
             key : e
         }
@@ -250,7 +253,7 @@ const App = () => {
                 })}            
                 </Grid>
             </Grid>
-            { /* <Grid item sx={{ bottom : 0, width : '100%', position : 'fixed', display: { sm: 'none', xs: 'block' } }}>
+            <Grid item sx={{ bottom : 0, width : '100%', position : 'fixed', display: { sm: 'none', xs: 'block' } }}>
                 <Keyboard
                     keyboardRef={r => (keyboard.current = r)}
                     layoutName={'default'}
@@ -263,7 +266,7 @@ const App = () => {
                     }}
                     onKeyPress={handleMobileKeyboard}
                 />
-            </Grid> */}
+            </Grid>
             { /* Footer */ }
             <Grid item  sx={{ display: { sm: 'block', xs: 'none' } }}>
                 <Footer />
@@ -277,11 +280,14 @@ const App = () => {
                 </Snackbar>
             </Grid>
             <Grid item>
-                <Fab color="primary" aria-label="help" size="small" style={{ position: 'absolute', bottom: 16, right: 16 }} onClick={() => setOpenHowToDialog(true)}>
+                <Fab color="primary" aria-label="help" size="small" style={{ position: 'fixed', bottom: 16, right: 16 }} onClick={() => setOpenHowToDialog(true)}>
                     <HelpOutlineOutlinedIcon />
                 </Fab>
             </Grid>
-            <HowTo open={openHowToDialog} setOpen={setOpenHowToDialog}/>
+            { /* HowTo */ }
+            <Grid item  sx={{ display: { sm: 'block', xs: 'none' } }}>
+                <HowTo open={openHowToDialog} setOpen={setOpenHowToDialog}/>
+            </Grid>
         </Grid>
     );
 }
