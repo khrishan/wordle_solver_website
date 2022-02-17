@@ -1,107 +1,103 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
+import { Avatar } from '@mui/material';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
+import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 
-const drawerWidth = 240;
 
-function ResponsiveDrawer(props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const drawer = (
-    <div>
-      <Toolbar />
-      <Divider />
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-
-  const container = window !== undefined ? () => window().document.body : undefined;
-
+const HowTo = ({open, setOpen}) => {
   return (
-    <Box sx={{ display: 'flex' }}>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
+      <BootstrapDialog
+        onClose={() => setOpen(false)}
+        aria-labelledby="customized-dialog-title"
+        open={open}
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          anchor="right"
+      <DialogTitle sx={{ m: 0, p: 2 }}>
+      About
+        <IconButton
+          aria-label="close"
+          onClick={() => setOpen(false)}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
           }}
         >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          anchor="right"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-    </Box>
+          <CloseIcon />
+        </IconButton>
+    </DialogTitle>
+        <DialogContent dividers>
+        <Grid container alignItems='center' direction='column' justifyContent='center'>
+          <Grid item>
+            <Typography variant='h5'>What is this?</Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant='body'>By inputting your wordle guesses, the app will provide all possible Wordle words.</Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant='h5'>How to Use?</Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant='body1'>You have 6 guesses to guess the correct word.</Typography>
+            <Typography variant='body1'>You can guess any valid word.</Typography>
+            <Typography variant='body1'>After each guess, each letter will turn green, yellow, or gray.</Typography>
+          </Grid>
+          <Grid item container direction='column' alignContent='center' justifyContent='center'>
+            <Grid item container alignItems='center' justifyContent='space-around' xs={6}>
+                <Grid key={`blank_icon`} item style={{ paddingTop : '1em', paddingBottom : '1em', paddingLeft : '0.5em' }}>
+                    <Avatar sx={{ bgcolor: '#606685', width : '50px', height : '50px' }} variant="square" alt='___' src="/broken-image.jpg">
+                        K
+                    </Avatar>
+                </Grid>
+                <Grid item xs={6}>
+                     = Wrong letter              
+                </Grid>
+            </Grid>
+            <Grid item container alignItems='center' justifyContent='space-around'>
+                <Grid key={`nearly_icon`} item style={{ paddingTop : '1em', paddingBottom : '1em', paddingLeft : '0.5em' }} xs={6}>
+                    <Avatar sx={{ bgcolor: '#606685', width : '50px', height : '50px' }} variant="square" alt='___' src="/broken-image.jpg">
+                        P
+                    </Avatar>
+                </Grid>
+                <Grid item xs={6}>
+                     = Correct letter, wrong spot
+                </Grid>
+            </Grid>
+            <Grid item container alignItems='center' justifyContent='space-around'>
+                <Grid key={`correct_icon`} item style={{ paddingTop : '1em', paddingBottom : '1em', paddingLeft : '0.5em' }} xs={6}>
+                    <Avatar sx={{ bgcolor: '#606685', width : '50px', height : '50px' }} variant="square" alt='___' src="/broken-image.jpg">
+                        S
+                    </Avatar>
+                </Grid>
+                <Grid item xs={6}>
+                    = Correct letter, correct spot
+                </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Typography variant='h5'>GitHub Link</Typography>
+          </Grid>
+        </Grid>
+        </DialogContent>
+      </BootstrapDialog>
   );
 }
 
-ResponsiveDrawer.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
-
-export default ResponsiveDrawer;
+export default HowTo;

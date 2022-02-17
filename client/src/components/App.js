@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Avatar,
   Button,
+  Fab,
   Grid,
   Snackbar,
   Typography
 } from '@mui/material'
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import Keyboard from 'react-simple-keyboard';
+import 'react-simple-keyboard/build/css/index.css';
 
+import HowTo from './HowTo';
 import Footer from './Footer'
+
+
 
 import { submitGuess } from '../resources/api';
 
@@ -27,6 +34,8 @@ const App = () => {
         open : false,
         message : 'DEFAULT MESSAGE'
     })
+    const [openHowToDialog, setOpenHowToDialog] = useState(false);
+    const keyboard = useRef();
 
     const handleKeyPress = (e) => {
         const currentState = JSON.parse(JSON.stringify(guesses))
@@ -68,6 +77,13 @@ const App = () => {
             currentState[currentState.length-1] = lastGuess
             setGuesses(currentState)
         }   
+    }
+    
+    const handleMobileKeyboard = (e, f) => {
+        const key = {
+            key : e
+        }
+        return handleKeyPress(key)
     }
 
     const handleClearGuesses = () => {
@@ -234,8 +250,24 @@ const App = () => {
                 })}            
                 </Grid>
             </Grid>
+            { /* <Grid item sx={{ bottom : 0, width : '100%', position : 'fixed', display: { sm: 'none', xs: 'block' } }}>
+                <Keyboard
+                    keyboardRef={r => (keyboard.current = r)}
+                    layoutName={'default'}
+                    layout={{
+                        default: [
+                          "Q W E R T Y U I O P",
+                          "A S D F G H J K L",
+                          "{backspace} Z X C V B N M Enter",
+                        ]
+                    }}
+                    onKeyPress={handleMobileKeyboard}
+                />
+            </Grid> */}
             { /* Footer */ }
-            <Footer />
+            <Grid item  sx={{ display: { sm: 'block', xs: 'none' } }}>
+                <Footer />
+            </Grid>
             { /* Snackbar */ }
             <Grid item>
                 <Snackbar open={snackbarSettings.open} autoHideDuration={6000} onClose={() => setSnackbarSettings({ ...snackbarSettings, open : false})} anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}>
@@ -244,6 +276,12 @@ const App = () => {
                     </Alert>
                 </Snackbar>
             </Grid>
+            <Grid item>
+                <Fab color="primary" aria-label="help" size="small" style={{ position: 'absolute', bottom: 16, right: 16 }} onClick={() => setOpenHowToDialog(true)}>
+                    <HelpOutlineOutlinedIcon />
+                </Fab>
+            </Grid>
+            <HowTo open={openHowToDialog} setOpen={setOpenHowToDialog}/>
         </Grid>
     );
 }

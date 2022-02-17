@@ -2,3 +2,4 @@ __pycache__/
 client/node_modules/
 server/__pycache__/
 server/venv/
+server/stderr.log
