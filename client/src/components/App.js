@@ -280,7 +280,7 @@ const App = () => {
                 </Snackbar>
             </Grid>
             <Grid item>
-                <Fab color="primary" aria-label="help" size="small" style={{ position: 'fixed', bottom: 16, right: 16 }} onClick={() => setOpenHowToDialog(true)}>
+                <Fab color="primary" aria-label="help" size="small" style={{ position: 'fixed', top: 16, right: 16 }} onClick={() => setOpenHowToDialog(true)}>
                     <HelpOutlineOutlinedIcon />
                 </Fab>
             </Grid>
